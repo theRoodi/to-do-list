@@ -1,0 +1,28 @@
+.App {
+  padding: 30px;
+  display: flex;
+}
+
+.App > div {
+  margin-right: 50px;
+}
+.isDone {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+.active {
+  background-color: green;
+  color: aliceblue;
+}
+.input{
+  margin-bottom: 10px;
+}
+
+.error{
+  border: 2px solid red;
+  outline: none;
+}
+.error_input{
+  height: 10px;
+  color: darkred;
+}
