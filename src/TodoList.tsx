@@ -1,5 +1,6 @@
-import React, {useState, KeyboardEvent, ChangeEvent} from 'react';
+import React from 'react';
 import {FilterValuesType} from './App';
+import {InputItem} from './components/InputItem';
 
 type TodoListPropsType = {
     title: string
@@ -18,8 +19,6 @@ export type TaskType = {
     isDone: boolean
 }
 const TodoList = (props: TodoListPropsType) => {
-    const [title, setTitle] = useState<string>('')
-    const [error, setError] = useState<boolean>(false)
 
     let tasksRender = props.tasks.length ? props.tasks.map(task => {
         const removeTask = () => {
@@ -40,39 +39,21 @@ const TodoList = (props: TodoListPropsType) => {
     )
     const onClickHandler = (status: FilterValuesType) => props.changeTodoListFilter(status, props.id)
 
-    const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && addTask()
-
-    const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value)
-        error && setError(false)
-    }
 
     const onClickDeleteHandler = () => {
         props.removeTodoList(props.id)
     }
 
-    const addTask = () => {
-        const trimmedTitle = title.trim()
-        if(trimmedTitle){
-            props.addTask(trimmedTitle, props.id)
-            setTitle('')
-        }else {
-            setError(true)
-        }
+    const addTask = (title: string) => {
+        props.addTask(title, props.id)
     }
+
     return (
         <div>
-            <h3>{props.title} <button onClick={() => onClickDeleteHandler()}>X</button></h3>
-            <div>
-                <input
-                    onChange={onChangeInputHandler}
-                    value={title}
-                    onKeyDown={onKeyDownHandler}
-                    className={error ? 'error' : 'input'}
-                />
-                <button onClick={addTask}>+</button>
-                {error && <div className={'error_input'}>Enter title! </div>}
-            </div>
+            <h3>{props.title}
+                <button onClick={() => onClickDeleteHandler()}>X</button>
+            </h3>
+            <InputItem addItem={addTask}/>
             <ul>
                 {tasksRender}
             </ul>
