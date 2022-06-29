@@ -12,7 +12,7 @@ export type TodoListsType = {
 }
 
 type TasksStateType = {
-    [key:string]: Array<TaskType>
+    [key: string]: Array<TaskType>
 }
 
 function App() {
@@ -63,10 +63,23 @@ function App() {
         tasks[todoId] = filteredTasks
         setTasks({...tasks})
     }
-
+    const changeTodoListTitle = (todoID: string, newTitle: string) => {
+        let todoList = todoLists.find(t => t.id === todoID)
+        if (todoList) {
+            todoList.title = newTitle
+            setTodoLists([...todoLists])
+        }
+    }
     const changeTaskStatus = (taskId: string, isDone: boolean, todoId: string) => {
         let task = tasks[todoId]
         let t = task.map(t => t.id === taskId ? {...t, isDone: isDone} : t)
+        tasks[todoId] = t
+        setTasks({...tasks})
+    }
+
+    const changeTaskTitle = (taskId: string, newTitle: string, todoId: string) => {
+        let task = tasks[todoId]
+        let t = task.map(t => t.id === taskId ? {...t, title: newTitle} : t)
         tasks[todoId] = t
         setTasks({...tasks})
     }
@@ -87,14 +100,14 @@ function App() {
     }
 
     const addTodoList = (title: string) => {
-        const todoList:TodoListsType = {id: v1(), title:title,  filter: 'all'}
+        const todoList: TodoListsType = {id: v1(), title: title, filter: 'all'}
         setTodoLists([todoList, ...todoLists])
-        setTasks({...tasks, [todoList.id]:[]})
+        setTasks({...tasks, [todoList.id]: []})
     }
 
     return (
         <div className="App">
-            <InputItem addItem={addTodoList}  />
+            <InputItem addItem={addTodoList}/>
             {
 
                 todoLists.map(t => {
@@ -114,6 +127,7 @@ function App() {
                             key={t.id}
                             id={t.id}
                             changeTaskStatus={changeTaskStatus}
+                            changeTaskTitle={changeTaskTitle}
                             title={t.title}
                             tasks={tasksRender}
                             removeTask={removeTask}
@@ -121,6 +135,7 @@ function App() {
                             addTask={addTask}
                             filter={t.filter}
                             removeTodoList={removeTodoList}
+                            changeTodoListTitle={changeTodoListTitle}
                         />
                     )
                 })

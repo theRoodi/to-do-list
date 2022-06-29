@@ -1,6 +1,7 @@
 import React from 'react';
 import {FilterValuesType} from './App';
 import {InputItem} from './components/InputItem';
+import {EditableSpan} from './components/EditableSpan';
 
 type TodoListPropsType = {
     title: string
@@ -10,8 +11,10 @@ type TodoListPropsType = {
     changeTodoListFilter: (filter: FilterValuesType, todoId: string) => void
     addTask: (task: string, todoId: string) => void
     changeTaskStatus: (taskId: string, isDone: boolean, todoId: string) => void
+    changeTaskTitle: (taskId: string, newTitle: string, todoId: string) => void
     filter: FilterValuesType
     removeTodoList: (todoListId: string) => void
+    changeTodoListTitle: (todoID: string, newTitle: string) => void
 }
 export type TaskType = {
     id: string
@@ -24,13 +27,18 @@ const TodoList = (props: TodoListPropsType) => {
         const removeTask = () => {
             props.removeTask(task.id, props.id)
         }
+
+        const onChangeHandler = (newTitle: string) => {
+            props.changeTaskTitle(task.id, newTitle, props.id)
+        }
+
         return (
             <li key={task.id}>
                 <input
                     onChange={(e) => props.changeTaskStatus(task.id, e.currentTarget.checked, props.id)}
                     type="checkbox"
                     checked={task.isDone}/>
-                <span className={task.isDone ? 'isDone' : ''}>{task.title}</span>
+                <EditableSpan title={task.title}  className={task.isDone ? 'isDone' : ''} onChange={onChangeHandler}/>
                 <button onClick={removeTask}> x</button>
             </li>
         )
@@ -48,10 +56,14 @@ const TodoList = (props: TodoListPropsType) => {
         props.addTask(title, props.id)
     }
 
+    const onChangeTodoListTitle = (title: string) => {
+        props.changeTodoListTitle(props.id, title)
+    }
+
     return (
         <div>
-            <h3>{props.title}
-                <button onClick={() => onClickDeleteHandler()}>X</button>
+            <h3><EditableSpan title={props.title} onChange={onChangeTodoListTitle}/>
+                <button onClick={onClickDeleteHandler}>X</button>
             </h3>
             <InputItem addItem={addTask}/>
             <ul>
