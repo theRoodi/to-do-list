@@ -1,4 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {IconButton, TextField} from '@material-ui/core';
+import {AddCircleOutline} from '@material-ui/icons';
 
 export type InputItemPropsType = {
     addItem: (title: string ) => void
@@ -26,14 +28,18 @@ export const InputItem = (props: InputItemPropsType) => {
 
     return (
         <div>
-            <input
-                onChange={onChangeInputHandler}
-                value={title}
-                onKeyDown={onKeyDownHandler}
-                className={error ? 'error' : 'input'}
+            <TextField id="outlined"
+                       label="Title"
+                       defaultValue="Hello World"
+                       variant="outlined"
+                       size={'small'}
+                       onChange={onChangeInputHandler}
+                       value={title}
+                       onKeyDown={onKeyDownHandler}
+                       error={error}
+                       helperText={error && "Enter title!"}
             />
-            <button onClick={addTask}>+</button>
-            {error && <div className={'error_input'}>Enter title! </div>}
+            <IconButton onClick={addTask}><AddCircleOutline fontSize={'small'}/></IconButton>
         </div>
     );
 };
