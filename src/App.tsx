@@ -13,7 +13,7 @@ export type FilterValuesType = 'all' | 'active' | 'completed'
     filter: FilterValuesType
 }
 
-type TasksStateType = {
+export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
 
